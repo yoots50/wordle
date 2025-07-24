@@ -1,0 +1,9 @@
+{
+    "rooms": [
+        {"title": "test1", "maxPlayer": 5, "playerNumber": 3, "wordLength": 6, "chances": 7, "rounds": 5, "roundPlaying": 3, "roomId": "123132"},
+        {"title": "test2", "maxPlayer": 8, "playerNumber": 5, "wordLength": 5, "chances": 7, "rounds": 5, "roundPlaying": 5, "roomId": "456456"},
+        {"title": "test3", "maxPlayer": 6, "playerNumber": 6, "wordLength": 4, "chances": 7, "rounds": 4, "roundPlaying": 3, "roomId": "787892"},
+        {"title": "test4", "maxPlayer": 4, "playerNumber": 3, "wordLength": 5, "chances": 7, "rounds": 3, "roundPlaying": 2, "roomId": "145632"},
+        {"title": "test5", "maxPlayer": 2, "playerNumber": 1, "wordLength": 4, "chances": 7, "rounds": 5, "roundPlaying": 3, "roomId": "156532"}
+    ]
+}

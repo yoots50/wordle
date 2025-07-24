@@ -1,20 +1,20 @@
-import { useState } from "react";
+import React from "react";
+import LetterBoxArray from "./LetterBoxArray";
 
-export default function LetterBox({ letter, color }) {
+export default function LetterBox({ history, answer }) {
   return (
     <div
       style={{
-        backgroundColor: color,
-        height: "100px",
-        width: "100px",
-        marginTop: "10px",
-        marginLeft: "10px",
-        textAlign: "center",
-        alignContent: "center"
-        
+        padding: "10px",
+        backgroundColor: "black",
+        display: "grid",
+        rowGap: "10px",
+        alignItems: "center",
+        borderRadius: "15px",
       }}
     >
-      <h1>{letter}</h1>
+      {history !== undefined &&
+        history.map((h, i) => <LetterBoxArray answer={answer} inputWord={h} />)}
     </div>
   );
 }

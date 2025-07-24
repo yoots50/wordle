@@ -1,103 +1,109 @@
-import React, { useEffect, useState } from "react";
-import LetterBoxArray from "../components/LetterBoxArray";
+import { useEffect, useState } from "react";
+import loadWordList from "../api/loadWordList";
+import { useQuery } from "@tanstack/react-query";
+import LetterBox from "../components/LetterBox";
+import UserWordForm from "../components/UserWordForm";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 
-export default function Game({ answer, refresh }) {
-  const [value, setValue] = useState("");
-  const [chances, setChances] = useState(7);
-  const [chancesLeft, setLeft] = useState(0);
-  const [history, setHistory] = useState(Array(7).fill(""));
-  const [status, setStatus] = useState(0);
-  const [msg, setMsg] = useState("");
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!status) {
-      if (value.length !== answer.length) {
-        setMsg(`input length must be ${answer.length}!`);
-      } else {
-        setHistory((prev) =>
-          prev.map((p, i) => {
-            if (i === chancesLeft) {
-              return value;
-            } else {
-              return p;
-            }
-          })
-        );
-        setLeft((prev) => prev + 1);
-        if (value === answer) {
-          setMsg("Congratuation! You Won!");
-          setStatus(2);
-        }
-        setValue("");
-      }
-    }
-  };
-  const handleChancesSubmit = (e) => {
-    e.preventDefault();
-    if (!status) {
-      if (parseInt(chances) < 1) {
-        setMsg("Wrong Input!");
-      } else {
-        setHistory(new Array(chances).fill(""));
-      }
-    }
-  };
-  const handleChances = (e) => {
-    if (!status) {
-      if (parseInt(e.target.value) <= 0) {
-        setMsg("Wrong Input!");
-      } else {
-        setChances(parseInt(e.target.value));
-      }
-    }
-  };
+export default function Game() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const chances = parseInt(searchParams.get("chances"));
+  const [wordLength, setLength] = useState(5);
+  const [info, setInfo] = useState({
+    msg: "",
+    chancesUsed: 0,
+    status: 0,
+    history: Array(chances).fill(""),
+  });
+  const {
+    isLoading,
+    error,
+    data: wordList,
+  } = useQuery({
+    queryKey: ["wordList", wordLength],
+    queryFn: () => loadWordList(wordLength),
+  });
+  const [answer, setAnswer] = useState("");
+
   useEffect(() => {
-    if (chancesLeft === chances && !status) {
-      setMsg("You Lose!");
-      setStatus(1);
+    if (!isLoading) {
+      setAnswer(wordList[Math.floor(Math.random() * wordList.length)]);
     }
-  }, [chancesLeft]);
+  }, [wordList]);
+
+  useEffect(() => {
+    if (info.chancesUsed === chances && !info.status) {
+      setInfo((prev) => {
+        return { ...prev, msg: "You Lose!", status: 1 };
+      });
+    }
+  }, [info.chancesUsed]);
+
+  const refresh = () => {
+    setAnswer(wordList[Math.floor(Math.random() * wordList.length)]);
+    setInfo((prev) => {
+      return {
+        msg: "",
+        chancesUsed: 0,
+        status: 0,
+        history: Array(chances).fill(""),
+      };
+    });
+  };
 
   const handleClick = () => {
     refresh();
-    setHistory(Array(chances).fill(""));
-    setLeft(0);
-    setStatus(0);
   };
-  useEffect(() => {
-    console.log(answer);
-  }, [answer]);
+
   return (
     <div>
-      <div>
-        {history !== undefined &&
-          history.map((h) => <LetterBoxArray answer={answer} inputWord={h} />)}
-      </div>
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Type answer..."
-          value={value}
-          type="text"
-          onChange={handleChange}
-          name="answer"
-        />
-        <button>submit</button>
-      </form>
-      <button onClick={handleClick}>refresh</button>
-      <form onSubmit={handleChancesSubmit}>
-        <input
-          placeholder="Type chances..."
-          value={chances}
-          type="number"
-          onChange={handleChances}
-          name="answer"
-        />
-        <button>submit</button>
-      </form>
-      <h1>{msg}</h1>
+      {isLoading ? (
+        "loading..."
+      ) : (
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Link
+            to={"/lobby"}
+            style={{
+              height: "30px",
+            }}
+          >
+            lobby
+          </Link>
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              alignContent: "center",
+              justifyItems: "center",
+              backgroundColor: "lightblue",
+            }}
+          >
+            <LetterBox history={info.history} answer={answer} />
+            <UserWordForm answer={answer} info={info} setInfo={setInfo} />
+            <button onClick={handleClick}>refresh</button>
+            <h1
+              style={{
+                backgroundColor: "grey",
+                width: "500px",
+                height: "50px",
+                fontSize: "35px",
+                textAlign: "center",
+                border: "solid 3px black",
+              }}
+            >
+              {info.msg}
+            </h1>
+          </div>
+        </div>
+      )}
+      {error ? `Error Occured! :${error}` : null}
     </div>
   );
 }
