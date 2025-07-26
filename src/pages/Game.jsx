@@ -3,7 +3,7 @@ import loadWordList from "../api/loadWordList";
 import { useQuery } from "@tanstack/react-query";
 import LetterBox from "../components/LetterBox";
 import UserWordForm from "../components/UserWordForm";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export default function Game() {
   const [searchParams, setSearchParams] = useSearchParams();

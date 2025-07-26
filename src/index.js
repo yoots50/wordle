@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import Game from "./pages/Game";
 import Home from "./pages/Home";
 import Lobby from "./pages/Lobby";
+import Setting from "./pages/Setting";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -17,9 +19,15 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "/game", element: <Game /> },
-      { path: "/Lobby", element: <Lobby />},
+      { path: "/lobby", element: <Lobby /> },
+      { path: "/setting", element: <Setting /> },
     ],
+    
   },
+  {
+    path: "/login",
+    element: <Login />,
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function SinglePlayerConfig({ setShowSinglePlayConfig }) {
+  const MAX_CHANCES = 8;
+  const MIN_CHANCES = 1;
   const [chances, setChances] = useState(7);
   const handleCancleButton = () => {
     setShowSinglePlayConfig(false);
   };
   const handleChances = (e) => {
-    if (e.target.value > 0) {
+    if (MIN_CHANCES <= e.target.value && e.target.value <= MAX_CHANCES) {
       setChances(e.target.value);
     }
   };
@@ -77,8 +79,55 @@ export default function SinglePlayerConfig({ setShowSinglePlayConfig }) {
           </button>
         </div>
         <div>
-          <input type="number" value={chances} onChange={handleChances} />
-          <Link to={`/game?chances=${chances}`}>Start</Link>
+          <div
+            style={{
+              display: "flex",
+              height: "40px",
+              alignItems: "center",
+              padding: "5px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "20px",
+                marginRight: "10px",
+              }}
+            >
+              chances:
+            </div>
+            <input
+              type="number"
+              value={chances}
+              onChange={handleChances}
+              name="chances"
+            />
+          </div>
+
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Link
+              to={`/game?chances=${chances}`}
+              style={{
+                backgroundColor: "grey",
+                color: "black",
+                textDecorationLine: "none",
+                border: "solid 3px black",
+                alignContent: "center",
+                paddingLeft: "8px",
+                paddingRight: "8px",
+                borderRadius: "15px",
+                fontSize: "40px",
+                paddingBottom: "4px",
+              }}
+            >
+              Start
+            </Link>
+          </div>
         </div>
       </div>
     </div>

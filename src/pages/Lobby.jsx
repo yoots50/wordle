@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SinglePlayerConfig from "../components/SinglePlayerConfig";
 import { useQuery } from "@tanstack/react-query";
 import loadRooms from "../api/loadRooms";
 import RoomsList from "../components/RoomsList";
-import { Link } from "react-router-dom";
 
 export default function Lobby() {
   const [showSinglePlayConfig, setShowSinglePlayConfig] = useState(false);
   const handleSinglePlayButton = () => {
     setShowSinglePlayConfig((prev) => !prev);
   };
+  const handleRefreshButton = () => {
+    refetch();
+  };
   const {
     isLoading,
     error,
+    refetch,
     data: rooms,
   } = useQuery({
     queryKey: "rooms",
@@ -20,32 +23,59 @@ export default function Lobby() {
   });
   return (
     <div>
-      {isLoading ? (
-        "loading..."
-      ) : (
+      <div
+        style={{
+          width: "100vw",
+          height: "calc(100vh - 80px)",
+          backgroundColor: "pink",
+          display: "flex",
+        }}
+      >
         <div
           style={{
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "pink",
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
           }}
         >
-          <Link to={"/"}>Home</Link>
           <div
             style={{
-              height: "80px",
+              marginTop: "80px",
             }}
           >
-            <button onClick={handleSinglePlayButton}>SinglePlayer</button>
-            {showSinglePlayConfig ? (
-              <SinglePlayerConfig
-                setShowSinglePlayConfig={setShowSinglePlayConfig}
-              />
-            ) : null}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                height: "20px",
+              }}
+            >
+              <button
+                onClick={handleSinglePlayButton}
+                style={{
+                  width: "100px",
+                }}
+              >
+                SinglePlayer
+              </button>
+              <button
+                onClick={handleRefreshButton}
+                style={{
+                  width: "70px",
+                }}
+              >
+                Refresh
+              </button>
+            </div>
+            {isLoading ? "Loading..." : <RoomsList rooms={rooms} />}
           </div>
-          <RoomsList rooms={rooms} />
         </div>
-      )}
+      </div>
+      {showSinglePlayConfig ? (
+        <SinglePlayerConfig setShowSinglePlayConfig={setShowSinglePlayConfig} />
+      ) : null}
+      {error ? error : null}
     </div>
   );
 }
