@@ -6,6 +6,7 @@ export default function UserWordForm({ answer, info, setInfo }) {
     e.preventDefault();
     if (!info.status) {
       if (value.length !== answer.length) {
+        setValue("")
         setInfo((prev) => {
           return { ...prev, msg: `input length must be ${answer.length}!` };
         });

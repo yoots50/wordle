@@ -6,8 +6,7 @@ export default function RoomsList({rooms}) {
       style={{
         backgroundColor: "white",
         borderRadius: "15px",
-        width: "1000px",
-        height: "700px",
+        width: "80vw",
       }}
     >
       <div
@@ -28,7 +27,7 @@ export default function RoomsList({rooms}) {
           background: "lightblue",
         }}
       >
-        {rooms.map((room) => {
+        {rooms.map((room, i) => {
           return (
             <li
               style={{
@@ -40,6 +39,7 @@ export default function RoomsList({rooms}) {
                 alignItems:"center",
                 paddingLeft:"10px"
               }}
+              key={i}
             >
               RoomName: {room.title} WordLength: {room.wordLength} Chances:{" "}
               {room.chances} Rounds: {room.roundPlaying}/{room.rounds} Player:{" "}

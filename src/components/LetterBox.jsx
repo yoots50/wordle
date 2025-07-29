@@ -14,7 +14,7 @@ export default function LetterBox({ history, answer }) {
       }}
     >
       {history !== undefined &&
-        history.map((h, i) => <LetterBoxArray answer={answer} inputWord={h} />)}
+        history.map((h, i) => <LetterBoxArray answer={answer} inputWord={h} key={i}/>)}
     </div>
   );
 }

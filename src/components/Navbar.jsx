@@ -11,6 +11,7 @@ export default function Navbar() {
     >
       <Link to={"/"}>Home</Link>
       <Link to={"/login"}>Login</Link>
+      <Link to={"/lobby"}>lobby</Link>
     </div>
   );
 }

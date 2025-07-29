@@ -4,10 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import LetterBox from "../components/LetterBox";
 import UserWordForm from "../components/UserWordForm";
 import { Link, useSearchParams } from "react-router-dom";
+import ChatBox from "../components/ChatBox";
 
 export default function Game() {
   const [searchParams, setSearchParams] = useSearchParams();
   const chances = parseInt(searchParams.get("chances"));
+  const roomId = searchParams.get("roomId");
   const [wordLength, setLength] = useState(5);
   const [info, setInfo] = useState({
     msg: "",
@@ -62,32 +64,27 @@ export default function Game() {
       ) : (
         <div
           style={{
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "calc(100vh - 80px)",
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "center",
+            backgroundColor: "lightblue",
           }}
         >
-          <Link
-            to={"/lobby"}
-            style={{
-              height: "30px",
-            }}
-          >
-            lobby
-          </Link>
           <div
             style={{
-              width: "100%",
+              width: "40vw",
               height: "100%",
-              alignContent: "center",
               justifyItems: "center",
-              backgroundColor: "lightblue",
             }}
           >
-            <LetterBox history={info.history} answer={answer} />
-            <UserWordForm answer={answer} info={info} setInfo={setInfo} />
-            <button onClick={handleClick}>refresh</button>
+            <div
+              style={{
+                marginTop: "10px",
+              }}
+            >
+              <LetterBox history={info.history} answer={answer} />
+            </div>
             <h1
               style={{
                 backgroundColor: "grey",
@@ -100,6 +97,9 @@ export default function Game() {
             >
               {info.msg}
             </h1>
+            <UserWordForm answer={answer} info={info} setInfo={setInfo} />
+            {roomId ? null : <button onClick={handleClick}>refresh</button>}
+            {roomId ? <ChatBox chatServer={roomId} /> : null}
           </div>
         </div>
       )}
